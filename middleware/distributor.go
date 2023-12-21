@@ -80,6 +80,8 @@ func Distribute() func(c *gin.Context) {
 		c.Set("channel_id", channel.Id)
 		c.Set("channel_name", channel.Name)
 		c.Set("model_mapping", channel.GetModelMapping())
+		// 打印日志 channel 对象的所有信息
+		common.LogInfo(c, fmt.Sprintf("channel %s", channel.GetModelMapping()))
 		c.Request.Header.Set("Authorization", fmt.Sprintf("Bearer %s", channel.Key))
 		c.Set("base_url", channel.GetBaseURL())
 		switch channel.Type {
