@@ -3,14 +3,15 @@ package model
 import (
 	"errors"
 	"fmt"
-	"gorm.io/gorm"
 	"one-api/common"
+
+	"gorm.io/gorm"
 )
 
 type Token struct {
 	Id             int    `json:"id"`
 	UserId         int    `json:"user_id"`
-	Key            string `json:"key" gorm:"type:char(1148);uniqueIndex"`
+	Key            string `json:"key" gorm:"type:char(48);uniqueIndex"`
 	Status         int    `json:"status" gorm:"default:1"`
 	Name           string `json:"name" gorm:"index" `
 	CreatedTime    int64  `json:"created_time" gorm:"bigint"`
