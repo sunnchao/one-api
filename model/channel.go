@@ -1,14 +1,16 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"one-api/common"
+
+	"gorm.io/gorm"
 )
 
 type Channel struct {
 	Id                 int     `json:"id"`
 	Type               int     `json:"type" gorm:"default:0"`
-	Key                string  `json:"key" gorm:"not null;index"`
+	KeyUUID                string  `json:"key_uuid" gorm:"not null;index"`
+	Key                string  `json:"key" gorm:"text"`
 	Status             int     `json:"status" gorm:"default:1"`
 	Name               string  `json:"name" gorm:"index"`
 	Weight             *uint   `json:"weight" gorm:"default:0"`

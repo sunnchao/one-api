@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"one-api/common"
 	"one-api/model"
 	"strconv"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetAllChannels(c *gin.Context) {
@@ -85,6 +86,7 @@ func AddChannel(c *gin.Context) {
 	}
 	channel.CreatedTime = common.GetTimestamp()
 	keys := strings.Split(channel.Key, "\n")
+	channel.KeyUUID = common.GenerateKey()
 	channels := make([]model.Channel, 0, len(keys))
 	for _, key := range keys {
 		if key == "" {
@@ -93,6 +95,7 @@ func AddChannel(c *gin.Context) {
 		localChannel := channel
 		localChannel.Key = key
 		channels = append(channels, localChannel)
+		channel.KeyUUID = common.GenerateKey()
 	}
 	err = model.BatchInsertChannels(channels)
 	if err != nil {
