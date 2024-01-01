@@ -1,14 +1,9 @@
 FROM node:16 as builder
 
 WORKDIR /build
-COPY web/package.json .
-RUN npm install pnpm -g
-RUN pnpm install
-
 COPY ./web .
 COPY ./VERSION .
-#RUN DISABLE_ESLINT_PLUGIN='true' REACT_APP_VERSION=$(cat VERSION) npm run build
-RUN pnpm run build
+RUN chmod u+x ./build.sh && ./build.sh
 
 FROM golang AS builder2
 
