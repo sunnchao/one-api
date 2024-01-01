@@ -2,10 +2,13 @@ FROM node:16 as builder
 
 WORKDIR /build
 COPY web/package.json .
-RUN npm install
+RUN npm install pnpm -g
+RUN pnpm install
+
 COPY ./web .
 COPY ./VERSION .
-RUN DISABLE_ESLINT_PLUGIN='true' REACT_APP_VERSION=$(cat VERSION) npm run build
+#RUN DISABLE_ESLINT_PLUGIN='true' REACT_APP_VERSION=$(cat VERSION) npm run build
+RUN pnpm run build
 
 FROM golang AS builder2
 
@@ -14,7 +17,9 @@ ENV GO111MODULE=on \
     GOOS=linux
 
 WORKDIR /build
-ADD go.mod go.sum ./
+# ADD go.mod go.sum ./
+COPY go.mod ./
+COPY go.sum ./
 RUN go mod download
 COPY . .
 COPY --from=builder /build/build ./web/build
