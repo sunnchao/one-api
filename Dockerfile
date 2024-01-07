@@ -1,9 +1,16 @@
 FROM node:16 as builder
 
-WORKDIR /build
-COPY ./web .
+WORKDIR /web
 COPY ./VERSION .
-RUN chmod u+x ./build.sh && ./build.sh
+COPY ./web .
+
+WORKDIR /web/default
+RUN npm install
+RUN DISABLE_ESLINT_PLUGIN='true' REACT_APP_VERSION=$(cat VERSION) npm run build
+
+WORKDIR /web/berry
+RUN npm install
+RUN DISABLE_ESLINT_PLUGIN='true' REACT_APP_VERSION=$(cat VERSION) npm run build
 
 FROM golang AS builder2
 
