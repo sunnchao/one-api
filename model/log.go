@@ -9,9 +9,9 @@ import (
 )
 
 type Log struct {
-	Id               int    `json:"id;index:idx_created_at_id,priority:1"`
+	Id               int    `json:"id"`
 	UserId           int    `json:"user_id" gorm:"index"`
-	CreatedAt        int64  `json:"created_at" gorm:"bigint;index:idx_created_at_id,priority:2;index:idx_created_at_type"`
+	CreatedAt        int64  `json:"created_at" gorm:"bigint;index:idx_created_at_type"`
 	Type             int    `json:"type" gorm:"index:idx_created_at_type"`
 	Content          string `json:"content"`
 	Username         string `json:"username" gorm:"index:index_username_model_name,priority:2;default:''"`
@@ -212,13 +212,11 @@ func SearchLogsByDayAndModel(userId, start, end int) (LogStatistics []*LogStatis
 		sum(completion_tokens) as completion_tokens
 		FROM logs
 		WHERE type=2
-		AND userId= ?
+		AND user_id= ?
 		AND created_at BETWEEN ? AND ?
 		GROUP BY day, model_name
 		ORDER BY day, model_name
 	`, userId, start, end).Scan(&LogStatistics).Error
-
-	fmt.Println(userId, start, end)
 
 	return LogStatistics, err
 }
